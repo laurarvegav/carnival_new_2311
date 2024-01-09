@@ -22,11 +22,21 @@ class Ride
             rider.preferences.include?(@excitement) &&
             rider.spending_money >= @admission_fee
 
+            rider.ride(@name)
             @total_riders += 1
             @rider_log[rider] += @admission_fee
             rider.spend_money(@admission_fee)
             @total_revenue += @admission_fee
         end
+    end
+
+    def ride_summary
+        summary = {}
+
+        summary[:ride] = self
+        summary[:riders] = @rider_log.keys
+        summary[:total_revenue] = @total_revenue
+        summary
     end
 
 end
