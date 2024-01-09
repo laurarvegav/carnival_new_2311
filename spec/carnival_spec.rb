@@ -118,4 +118,38 @@ RSpec.describe Carnival do
             expect(carnival1.total_revenue).to eq(12)
         end
     end
+
+    describe "#summary" do
+        it "returns accurate summary for the carnival" do
+            carnival1 = Carnival.new('Broomfield', 2)
+            ride1 = Ride.new({ name: 'Carousel', min_height: 24, admission_fee: 1, excitement: :gentle })
+            ride2 = Ride.new({ name: 'Ferris Wheel', min_height: 36, admission_fee: 5, excitement: :gentle })
+            ride3 = Ride.new({ name: 'Roller Coaster', min_height: 54, admission_fee: 2, excitement: :thrilling })
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+            visitor2 = Visitor.new('Tucker', 55, '$5')
+            visitor3 = Visitor.new('Penny', 64, '$15')
+            visitor1.add_preference(:gentle)
+            visitor2.add_preference(:gentle)
+            visitor2.add_preference(:thrilling)
+            visitor3.add_preference(:gentle)
+            visitor3.add_preference(:thrilling)
+            carnival1.add_ride(ride1)
+            carnival1.add_ride(ride2)
+            carnival1.add_ride(ride3)
+
+            ride1.board_rider(visitor1)
+            ride1.board_rider(visitor3)
+            ride1.board_rider(visitor1)
+            ride2.board_rider(visitor1)
+            ride3.board_rider(visitor2)
+            ride3.board_rider(visitor3)
+
+            expect(carnival1.summary.class).to eq Hash
+            expect(carnival1.summary.keys).to eq([:visitor_count, :visitors, :revenue_earned, :rides])
+            expect(carnival1.summary[:visitor_count]).to eq(5)
+            expect(carnival1.summary[:revenue_earned]).to eq(12)
+            expect(carnival1.summary[:rides]).to eq([ride1.ride_summary, ride2.ride_summary, ride3.ride_summary])
+            expect(carnival1.summary[:visitors]).to eq([{visitor: visitor1, favorite_ride: ride1, total_money_spent: 7}, {visitor: visitor2, favorite_ride: ride3, total_money_spent: 2}, {visitor: visitor3, favorite_ride: ride1, total_money_spent: 3}])
+        end
+    end
 end
