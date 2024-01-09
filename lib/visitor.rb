@@ -3,7 +3,8 @@ class Visitor
                 :height,
                 :preferences,
                 :spending_money,
-                :spent_money
+                :spent_money,
+                :rides
 
     def initialize(name, height, spending_money)
         @name = name
@@ -11,6 +12,7 @@ class Visitor
         @spending_money = spending_money.gsub(/[^\d\.]/, '').to_i
         @preferences = []
         @spent_money = 0
+        @rides = Hash.new(0)
     end
 
     def add_preference(preference)
@@ -24,5 +26,18 @@ class Visitor
     def spend_money(fee)
         @spending_money -= fee
         @spent_money += fee
+    end
+
+    def ride(ride)
+        @rides[ride] +=1
+    end
+
+    def visitor_summary
+        summary = {}
+        summary[:visitor] = self
+        summary[:total_money_spent] = @spent_money
+        
+        summary[:favorite_ride] = @rides.key(@rides.values.max)
+        summary
     end
 end
