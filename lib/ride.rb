@@ -24,7 +24,7 @@ class Ride
 
             @total_riders += 1
             @rider_log[rider] += @admission_fee
-            rider.spending_money = rider.spending_money - @admission_fee
+            rider.spend_money(@admission_fee)
             @total_revenue += @admission_fee
         end
     end
