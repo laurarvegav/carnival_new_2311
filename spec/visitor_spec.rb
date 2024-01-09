@@ -42,6 +42,12 @@ RSpec.describe Visitor do
     end
 
     describe "#spend_money" do
+        it "starts with 0 spent money" do
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+
+            expect(visitor1.spent_money).to eq(0)
+        end
+
         it "recalculates spending money after paying for a fee" do
             visitor1 = Visitor.new('Bruce', 54, '$10')
             visitor2 = Visitor.new('Tucker', 36, '$5')
@@ -51,9 +57,13 @@ RSpec.describe Visitor do
             visitor2.spend_money(2)
             visitor3.spend_money(10)
 
+            expect(visitor1.spending_money).to eq(1)
             expect(visitor2.spending_money).to eq(3)
             expect(visitor3.spending_money).to eq(5)
 
+            expect(visitor1.spent_money).to eq(9)
+            expect(visitor2.spent_money).to eq(2)
+            expect(visitor3.spent_money).to eq(10)
         end
     end
 end
