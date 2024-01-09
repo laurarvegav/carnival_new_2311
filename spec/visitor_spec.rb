@@ -40,4 +40,20 @@ RSpec.describe Visitor do
             expect(visitor1.tall_enough?(64)).to be false
         end
     end
+
+    describe "#spend_money" do
+        it "recalculates spending money after paying for a fee" do
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+            visitor2 = Visitor.new('Tucker', 36, '$5')
+            visitor3 = Visitor.new('Penny', 64, '$15')
+
+            visitor1.spend_money(9)
+            visitor2.spend_money(2)
+            visitor3.spend_money(10)
+
+            expect(visitor2.spending_money).to eq(3)
+            expect(visitor3.spending_money).to eq(5)
+
+        end
+    end
 end
