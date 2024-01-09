@@ -66,4 +66,31 @@ RSpec.describe Visitor do
             expect(visitor3.spent_money).to eq(10)
         end
     end
+
+    describe "#summary" do
+        it "starts with no rides" do
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+
+            expect(visitor1.rides).to eq({})
+        end
+
+        it "can add rides and accumulate # correctly" do
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+            visitor1.ride('RollerCoaster')
+            visitor1.ride('Train')
+            visitor1.ride('RollerCoaster')
+
+            expect(visitor1.rides).to eq({'RollerCoaster' => 2, 'Train' => 1})
+        end
+
+        it "can return complete summary" do
+            visitor1 = Visitor.new('Bruce', 54, '$10')
+            visitor1.ride('RollerCoaster')
+            visitor1.ride('Train')
+            visitor1.ride('RollerCoaster')
+            visitor1.spend_money(9)
+            
+            expect(visitor1.visitor_summary).to eq({visitor: visitor1, total_money_spent: 9, favorite_ride: 'RollerCoaster'})
+        end
+    end
 end
