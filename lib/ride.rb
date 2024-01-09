@@ -4,7 +4,8 @@ class Ride
                 :admission_fee,
                 :excitement,
                 :total_revenue,
-                :rider_log
+                :rider_log,
+                :total_riders
     
     def initialize(data)
         @name = data[:name]
@@ -13,6 +14,7 @@ class Ride
         @excitement = data[:excitement]
         @total_revenue = 0
         @rider_log = Hash.new(0)
+        @total_riders = 0
     end
 
     def board_rider(rider)
@@ -20,6 +22,7 @@ class Ride
             rider.preferences.include?(@excitement) &&
             rider.spending_money >= @admission_fee
 
+            @total_riders += 1
             @rider_log[rider] += @admission_fee
             rider.spending_money = rider.spending_money - @admission_fee
             @total_revenue += @admission_fee
