@@ -3,9 +3,9 @@ class Carnival
                 :duration,
                 :rides
 
-    def initialize(name,week_duration)
+    def initialize(name, week_duration)
         @name = name
-        @duration = week_duration * 7
+        @duration = week_duration
         @rides = []
     end
 
@@ -15,7 +15,7 @@ class Carnival
 
     def most_popular_ride
         @rides.max_by do |ride|
-            ride.total_riders
+            ride.rider_log.values.sum
         end
     end
 
@@ -26,30 +26,26 @@ class Carnival
     end
 
     def total_revenue
-        revenue = 0
-        @rides.each do |ride|
-            revenue += ride.total_revenue
+        @rides.sum do |ride|
+            ride.total_revenue
         end
-        revenue
     end
 
     def summary
-        summary = {}
-        summary[:visitor_count] = 0
-        summary[:visitors] = []
-        summary[:revenue_earned] = total_revenue
-        summary[:rides] = []
-        
+        summary = {visitor_count:0, visitors: [],revenue_earned: total_revenue, rides: []}
+        v = []
         @rides.each do |ride|
-            summary[:visitor_count] += ride.rider_log.size
-            
             summary[:rides] << ride.ride_summary
-           
-            ride.rider_log.keys.each do |rider|
-                summary[:visitors] << rider.visitor_summary
+            require 'pry'; binding.pry
+            ride.rider_log.each do |visitor, count|
+                summary[:visitor_count] += 1 if !v.include?(visitor)
+                
+                summary[:visitors] << visitor.visitor_summary if !v.include?(visitor)
+
+                v << visitor
             end
         end
-        
+        #require 'pry'; binding.pry
        summary
     end
 end

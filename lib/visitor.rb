@@ -9,7 +9,7 @@ class Visitor
     def initialize(name, height, spending_money)
         @name = name
         @height = height
-        @spending_money = spending_money.gsub(/[^\d\.]/, '').to_i
+        @spending_money = spending_money.delete('$').to_i
         @preferences = []
         @spent_money = 0
         @rides = Hash.new(0)
@@ -29,14 +29,13 @@ class Visitor
     end
 
     def ride(ride)
-        @rides[ride] +=1
+        @rides[ride] += 1
     end
 
     def visitor_summary
         summary = {}
         summary[:visitor] = self
         summary[:total_money_spent] = @spent_money
-        
         summary[:favorite_ride] = @rides.key(@rides.values.max)
         summary
     end

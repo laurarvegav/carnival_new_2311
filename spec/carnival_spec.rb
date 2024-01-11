@@ -9,7 +9,7 @@ RSpec.describe Carnival do
         end
         
         it "has a duration" do
-            carnival1 = Carnival.new('Broomfield', 2)
+            carnival1 = Carnival.new('Broomfield', 14)
 
             expect(carnival1.duration).to eq(14)
         end
@@ -143,13 +143,46 @@ RSpec.describe Carnival do
             ride2.board_rider(visitor1)
             ride3.board_rider(visitor2)
             ride3.board_rider(visitor3)
+require 'pry'; binding.pry
+            expected = {
+                visitor_count: 3,
+                revenue_earned: 12,
+                visitors: 
+                [
+                  { visitor: visitor1, favorite_ride: ride1, total_money_spent: 7 },
+                  { visitor: visitor2, favorite_ride: ride3, total_money_spent: 2 },
+                  { visitor: visitor3, favorite_ride: ride1, total_money_spent: 3 }
+                ],
+                rides: 
+                [
+                  { ride: ride1, riders: [visitor1, visitor3], total_revenue: 3 },
+                  { ride: ride2, riders: [visitor1], total_revenue: 5 },
+                  { ride: ride3, riders: [visitor2, visitor3], total_revenue: 4 }
+                ]
+              }
 
-            expect(carnival1.summary.class).to eq Hash
-            expect(carnival1.summary.keys).to eq([:visitor_count, :visitors, :revenue_earned, :rides])
-            expect(carnival1.summary[:visitor_count]).to eq(5)
-            expect(carnival1.summary[:revenue_earned]).to eq(12)
-            expect(carnival1.summary[:rides]).to eq([ride1.ride_summary, ride2.ride_summary, ride3.ride_summary])
-            expect(carnival1.summary[:visitors]).to eq([{visitor: visitor1, favorite_ride: ride1, total_money_spent: 7}, {visitor: visitor2, favorite_ride: ride3, total_money_spent: 2}, {visitor: visitor3, favorite_ride: ride1, total_money_spent: 3}])
+            expect(carnival1.summary).to eq(expected)
+
+            # expect(carnival1.summary.class).to eq Hash
+            # expect(carnival1.summary.keys).to eq([:visitor_count, :visitors, :revenue_earned, :rides])
+            # expect(carnival1.summary[:visitor_count]).to eq(3)
+            # expect(carnival1.summary[:revenue_earned]).to eq(12)
+            # expect(carnival1.summary[:rides]).to eq([ride1.ride_summary, ride2.ride_summary, ride3.ride_summary])
+            # expected = [
+            #     {   visitor: visitor1, 
+            #         favorite_ride: ride1, 
+            #         total_money_spent: 7
+            #     }, 
+            #     {   visitor: visitor2, 
+            #         favorite_ride: ride3, 
+            #         total_money_spent: 2
+            #     }, 
+            #     {   visitor: visitor3, 
+            #         favorite_ride: ride1, 
+            #         total_money_spent: 3
+            #     }
+            # ]
+            # expect(carnival1.summary[:visitors]).to eq(expected)
         end
     end
 end

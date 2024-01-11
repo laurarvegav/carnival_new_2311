@@ -14,29 +14,24 @@ class Ride
         @excitement = data[:excitement]
         @total_revenue = 0
         @rider_log = Hash.new(0)
-        @total_riders = 0
     end
 
     def board_rider(rider)
-        if rider.tall_enough?(min_height) && 
-            rider.preferences.include?(@excitement) &&
-            rider.spending_money >= @admission_fee
-
-            rider.ride(@name)
-            @total_riders += 1
-            @rider_log[rider] += @admission_fee
+        if  meet_requirements?(rider)
+            @rider_log[rider] += 1
+            rider.ride(self)
             rider.spend_money(@admission_fee)
             @total_revenue += @admission_fee
         end
     end
 
-    def ride_summary
-        summary = {}
-
-        summary[:ride] = self
-        summary[:riders] = @rider_log.keys
-        summary[:total_revenue] = @total_revenue
-        summary
+    def meet_requirements?(rider)
+        rider.tall_enough?(min_height) && 
+        rider.preferences.include?(@excitement) && 
+        rider.spending_money >= @admission_fee
     end
 
+    def ride_summary
+        {ride: self, riders: @rider_log.keys, total_revenue: @total_revenue}
+    end
 end
